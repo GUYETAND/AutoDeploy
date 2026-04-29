@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autodeploy-app
+  labels:
+    app: autodeploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autodeploy
+  template:
+    metadata:
+      labels:
+        app: autodeploy
+    spec:
+      containers:
+        - name: autodeploy-app
+          # Image is set during CI/CD via env substitution
+          image: AUTO_DEPLOY_IMAGE_PLACEHOLDER
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          # Liveness probe — restarts the container if it becomes unresponsive
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          # Readiness probe — holds traffic until the app is ready
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
