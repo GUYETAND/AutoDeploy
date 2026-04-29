@@ -66,21 +66,21 @@ gcloud iam service-accounts create github-deployer \
   --display-name="GitHub Actions Deployer"
 
 # Grant required IAM roles
-gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
-  --member="serviceAccount:github-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
+gcloud projects add-iam-policy-binding cs-final-cloud \
+  --member="serviceAccount:github-deployer@cs-final-cloud.iam.gserviceaccount.com" \
   --role="roles/container.developer"
 
-gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
-  --member="serviceAccount:github-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
+gcloud projects add-iam-policy-binding cs-final-cloud \
+  --member="serviceAccount:github-deployer@cs-final-cloud.iam.gserviceaccount.com" \
   --role="roles/artifactregistry.writer"
 
-gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
-  --member="serviceAccount:github-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com" \
+gcloud projects add-iam-policy-binding cs-final-cloud \
+  --member="serviceAccount:github-deployer@cs-final-cloud.iam.gserviceaccount.com" \
   --role="roles/container.clusterViewer"
 
 # Generate and download the key
 gcloud iam service-accounts keys create github-key.json \
-  --iam-account=github-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com
+  --iam-account=github-deployer@cs-final-cloud.iam.gserviceaccount.com
 ```
 
 ### 4. Add the key as a GitHub Secret
@@ -98,7 +98,7 @@ rm github-key.json
 ### 5. Update workflow environment variables
 
 Edit `.github/workflows/deploy.yml` and replace:
-- `YOUR_PROJECT_ID` with your actual GCP project ID
+- `cs-final-cloud` with your actual GCP project ID
 - `REGION`, `REPOSITORY`, `CLUSTER_NAME` if you used different names
 
 ---
@@ -145,5 +145,5 @@ To tear down all GCP resources:
 ```bash
 gcloud container clusters delete autodeploy-cluster --region=us-central1
 gcloud artifacts repositories delete autodeploy-repo --location=us-central1
-gcloud iam service-accounts delete github-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com
+gcloud iam service-accounts delete github-deployer@cs-final-cloud.iam.gserviceaccount.com
 ```

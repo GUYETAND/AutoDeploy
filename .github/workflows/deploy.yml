@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 env:
-  PROJECT_ID: YOUR_PROJECT_ID        # <-- replace with your GCP project ID
+  PROJECT_ID: cs-final-cloud        # <-- replace with your GCP project ID
   REGION: us-central1                # <-- your GCP region
   REPOSITORY: autodeploy-repo        # <-- your Artifact Registry repo name
   IMAGE_NAME: autodeploy-app
