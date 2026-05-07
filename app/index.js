@@ -127,6 +127,9 @@ app.get('/', (req, res) => {
 // Export app for testing
 module.exports = app;
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Only start the server when run directly (not when imported by Jest)
+if (require.main === module) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
