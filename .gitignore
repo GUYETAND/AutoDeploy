@@ -1,0 +1,6 @@
+node_modules/
+*.pptx
+*.docx
+video_script.md
+report/
+.DS_Store

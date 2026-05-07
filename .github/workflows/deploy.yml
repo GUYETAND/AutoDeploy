@@ -20,17 +20,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Authenticate with Google Cloud
+      # 2. Run automated tests
+      - name: Run tests
+        working-directory: ./app
+        run: |
+          npm ci
+          npm test
+
+      # 3. Authenticate with Google Cloud
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      # 3. Configure Docker to use Artifact Registry
+      # 4. Configure Docker to use Artifact Registry
       - name: Configure Docker
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
-      # 4. Build Docker image
+      # 5. Build Docker image
       - name: Build Docker image
         run: |
           docker build \
@@ -38,13 +45,13 @@ jobs:
             -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest \
             .
 
-      # 5. Push image to Artifact Registry
+      # 6. Push image to Artifact Registry
       - name: Push Docker image
         run: |
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
 
-      # 6. Get GKE credentials
+      # 7. Get GKE credentials
       - name: Get GKE credentials
         uses: google-github-actions/get-gke-credentials@v2
         with:
@@ -52,7 +59,7 @@ jobs:
           location: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}
 
-      # 7. Deploy to Kubernetes
+      # 8. Deploy to Kubernetes
       - name: Deploy to GKE
         run: |
           IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
