@@ -100,7 +100,7 @@ app.get('/', (req, res) => {
 <body>
   <div class="container">
     <div class="logo">&#9729;</div>
-    <h1>AutoDeploy</h1>
+    <h1>hello, AutoDeploy</h1>
     <p class="subtitle">Cloud-Native CI/CD Pipeline</p>
     <div class="pipeline">
       <div class="step"><div class="icon">&#128190;</div><div class="label">Git Push</div></div>
